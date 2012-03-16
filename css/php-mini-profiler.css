@@ -1,0 +1,32 @@
+#pmp-profiler-total {
+	position: fixed;
+	top: 0px;
+	left: 20px;
+	color: lightgray;
+	border-bottom: solid 2px gray;
+	border-left: solid 2px gray;
+	border-right: solid 2px gray;
+	border-radius: 10px;
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
+	padding: 2px;
+	box-shadow: 1px 1px 2px 1px lightgray;
+}
+
+#pmp-profiler-details {
+	position: fixed;
+	top: 0px;
+	left: 100px;
+	color: black;
+	color: lightgray;
+	border-bottom: solid 2px gray;
+	border-left: solid 2px gray;
+	border-right: solid 2px gray;
+	border-radius: 10px;
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
+	padding: 2px;
+	box-shadow: 1px 1px 2px 1px lightgray;
+	display: none;
+}
+
