@@ -9,7 +9,7 @@ $(window).ready(function() {
 		
 		$('BODY').prepend(
 			Mustache.render(
-				'<div id="pmp-profiler-total">{{ total }}</div>',
+				'<div id="pmp-profiler-total">{{ total }} ms</div>',
 				window.PhpMiniProfiler
 			)
 		);
@@ -21,13 +21,13 @@ $(window).ready(function() {
 					'<hr/>' + 
 					'<div class="benchmark">' +
 						'{{#benchmarks}}' +
-							'{{name}} {{time}}<br/>' +
+							'{{name}} {{time}} ms<br/>' +
 						'{{/benchmarks}}' +
 					'</div>' +
 					'<hr/>' +
 					'<div class="queries">' +
 						'{{#queries}}' +
-							'{{query}} {{time}}<br/>' +
+							'{{query}} {{time}} ms<br/>' +
 						'{{/queries}}' +
 					'</div>' +
 				'</div>',
