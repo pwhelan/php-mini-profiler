@@ -37,3 +37,8 @@
 	z-index: 5000;
 }
 
+#pmp-profiler-details code {
+	width: 550px;
+	overflow: auto;
+}
+
