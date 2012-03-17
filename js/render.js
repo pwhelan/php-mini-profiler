@@ -7,37 +7,23 @@ $(window).ready(function() {
 	
 	if ( typeof window.PhpMiniProfiler == 'object') {
 		
-		$('BODY').prepend(
-			Mustache.render(
-				'<div id="pmp-profiler-total">{{ total }} ms</div>',
-				window.PhpMiniProfiler
-			)
-		);
+		var renderTemplate = function(tmplName) {
+			$.get(PhpMiniProfiler.includePath + '/templates/' + tmplName, {}, 
+				function(tmpl) {
+					$('BODY').prepend(
+						Mustache.render(tmpl, PhpMiniProfiler)
+					);
+				},
+				'html'
+			);		
+		};
 		
-		$('BODY').prepend(
-			Mustache.render(
-				'<div id="pmp-profiler-details">' +
-					'<b>' + window.location.pathname + '</b>' +
-					'<hr/>' + 
-					'<div class="benchmark">' +
-						'{{#benchmarks}}' +
-							'{{name}} {{time}} ms<br/>' +
-						'{{/benchmarks}}' +
-					'</div>' +
-					'<hr/>' +
-					'<div class="queries">' +
-						'{{#queries}}' +
-							'{{query}} {{time}} ms<br/>' +
-						'{{/queries}}' +
-					'</div>' +
-				'</div>',
-				window.PhpMiniProfiler
-			)
-		);
+		renderTemplate('floater.ms');
+		renderTemplate('details.ms');
 		
 		var displayedDetails = false;
 		
-		$('#pmp-profiler-total').click(function() {
+		$('#pmp-profiler-total').live('click', function() {
 			if (!displayedDetails) {
 				$(this).css('color', 'black');
 				$('#pmp-profiler-details').css('display', 'inline');
