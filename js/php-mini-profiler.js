@@ -18,7 +18,8 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		var loadcss = function(s, f) {
 			var sc = document.createElement("link");
 			sc.rel = "stylesheet";
-			sc.href = PhpMiniProfiler.includePath.substr(0, path.lastIndexOf('/')) 
+			sc.href = PhpMiniProfiler.includePath.substr(0, 
+					PhpMiniProfiler.includePath.lastIndexOf('/')) 
 					+ '/' + s;
 			var l = false;
 			sc.onload = sc.onreadystatechange  = function(_, abort) {
