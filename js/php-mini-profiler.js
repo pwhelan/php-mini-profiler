@@ -1,31 +1,24 @@
-if ( typeof PhpMiniProfiler == 'object') {
-	PhpMiniProfiler.init = function() {
+if ( typeof window.PhpMiniProfiler == 'object') {
+	
+	var PhpMiniProfilerPath = null;
+	
+	PhpMiniProfiler.initPath = function() {
 		
-		var PhpMiniProfilerPath = null;
 		var getCurrentPath = function() {
-			var oldOnError = typeof window.onerror != 'undefined' ? window.onerror : null;
-			var path = null;
-			
-			window.onerror = function(msg, url, line) {
-				alert('URL = ' + url);
-				PhpMiniProfilerPath = url.substr(0, url.lastIndexOf('/'));
-				
-				window.onerror = oldOnError;
-				alert('PATH = ' + PhpMiniProfilerPath);
-			}
-			
-			var error = function() {
-				//x.y = z.x;
-			};
-			error();
-		};
+			var scripts= document.getElementsByTagName('script');
+			var path= scripts[scripts.length-1].src.split('?')[0];
+			PhpMiniProfilerPath = path.substr(0, path.lastIndexOf('/'));;
+		}
 		getCurrentPath();
+	}
+	
+	PhpMiniProfiler.init = function() {
 		
 		var loadjs = function(s, f) {
 			var sc = document.createElement("script");
 			sc.async = "async";
 			sc.type = "text/javascript";
-			sc.src = 'js/' + s; // fix getCurrentPath
+			sc.src = PhpMiniProfilerPath + '/' + s; // fix getCurrentPath
 			var l = false;
 			sc.onload = sc.onreadystatechange  = function(_, abort) {
 				if (!l && (!sc.readyState || /loaded|complete/.test(sc.readyState))) {
@@ -53,6 +46,7 @@ if ( typeof PhpMiniProfiler == 'object') {
 		
 	};
 	
+	PhpMiniProfiler.initPath();
 	PhpMiniProfiler.init();
 }
 
