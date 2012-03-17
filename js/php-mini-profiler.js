@@ -65,7 +65,9 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			)
 		);
 		
-		loadjs('highlight/highlight.pack.js');
+		loadjs('highlight/highlight.pack.js', function() {
+			hljs.initHighlightingOnLoad();
+		});
 	};
 	
 	PhpMiniProfiler.initPath();
