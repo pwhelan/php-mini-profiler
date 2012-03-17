@@ -1,2 +1,1 @@
-<div id="pmp-profiler-total">{{ benchmarks.total }}</div>
-
+<div id="pmp-profiler-total">{{ total }} ms</div>
