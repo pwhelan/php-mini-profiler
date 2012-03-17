@@ -3,7 +3,9 @@
 	<hr/> 
 	<div class="benchmark">
 	{{#benchmarks}}
-		{{name}} {{time}} ms<br/>
+		<div style="float:left">{{name}}</div>
+		<div style="float:right">{{time}} ms</div>
+		<div style="clear:both"></div>
 	{{/benchmarks}}
 	</div>
 	<hr/>
