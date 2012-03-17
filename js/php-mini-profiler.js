@@ -52,7 +52,6 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		}; 
 		
 		loadcss('highlight/default.css');
-		loadjs('highlight/highlight.pack.js');
 		
 		loadjs('mustache.js', 
 			(typeof jQuery == 'undefined' ? 
@@ -66,6 +65,7 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			)
 		);
 		
+		loadjs('highlight/highlight.pack.js');
 	};
 	
 	PhpMiniProfiler.initPath();
