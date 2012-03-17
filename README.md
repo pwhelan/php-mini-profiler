@@ -10,18 +10,18 @@ PhpMiniProfiler.
 Example
 -------
 
-<html>
-	<script>
-	window.PhpMiniProfiler = {
-		benchmarks : [
-			{name: 'controller load', time: 1.024},
-			{name: 'controller action', time: 1.024}
-		],
-		total: 2.048
-	}
-	</script>
-	<link rel="stylesheet" href="css/php-mini-profiler.css"/>
-	<script src="js/php-mini-profiler.js"></script>
-</html>
+	<html>
+		<script>
+		window.PhpMiniProfiler = {
+			benchmarks : [
+				{name: 'controller load', time: 1.024},
+				{name: 'controller action', time: 1.024}
+			],
+			total: 2.048
+		}
+		</script>
+		<link rel="stylesheet" href="css/php-mini-profiler.css"/>
+		<script src="js/php-mini-profiler.js"></script>
+	</html>
 
 This code will render a fake benchmark for the HTML page.
