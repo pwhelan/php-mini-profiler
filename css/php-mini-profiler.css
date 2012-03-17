@@ -13,10 +13,12 @@
 	padding: 2px;
 	box-shadow: 1px 1px 2px 1px lightgray;
 	z-index: 5000;
+	cursor: pointer;
 }
 
 #pmp-profiler-details {
 	height: 500px;
+	width: 600px;
 	overflow: auto;
 	background-color: white;
 	position: fixed;
