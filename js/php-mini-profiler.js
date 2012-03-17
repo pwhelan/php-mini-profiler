@@ -8,7 +8,8 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		var getCurrentPath = function() {
 			var scripts= document.getElementsByTagName('script');
 			var path= scripts[scripts.length-1].src.split('?')[0];
-			PhpMiniProfiler.includePath = path.substr(0, path.lastIndexOf('/'));
+			
+			PhpMiniProfiler.includePath = path.substr(0, path.lastIndexOf('/js/'));
 		}
 		getCurrentPath();
 	}
@@ -18,9 +19,7 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		var loadcss = function(s, f) {
 			var sc = document.createElement("link");
 			sc.rel = "stylesheet";
-			sc.href = PhpMiniProfiler.includePath.substr(0, 
-					PhpMiniProfiler.includePath.lastIndexOf('/')) 
-					+ '/' + s;
+			sc.href = PhpMiniProfiler.includePath + '/css/' + s;
 			var l = false;
 			sc.onload = sc.onreadystatechange  = function(_, abort) {
 				if (!l && (!sc.readyState || /loaded|complete/.test(sc.readyState))) {
@@ -38,7 +37,7 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			var sc = document.createElement("script");
 			sc.async = "async";
 			sc.type = "text/javascript";
-			sc.src = PhpMiniProfiler.includePath + '/' + s;
+			sc.src = PhpMiniProfiler.includePath + '/js/' + s;
 			var l = false;
 			sc.onload = sc.onreadystatechange  = function(_, abort) {
 				if (!l && (!sc.readyState || /loaded|complete/.test(sc.readyState))) {
