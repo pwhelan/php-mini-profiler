@@ -9,9 +9,7 @@
 	<hr/>
 	<div class="queries">
 	{{#queries}}
-		<code class="sql">
-			{{query}}
-		</code>
+		<pre><code class="sql">{{query}}</code></pre>
 		{{time}} ms<br/>
 	{{/queries}}
 	</div>
