@@ -51,7 +51,7 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			document.getElementsByTagName('head')[0].appendChild(sc);
 		}; 
 		
-		loadcss('highligth/default.css');
+		loadcss('highlight/default.css');
 		loadjs('highlight/highlight.pack.js');
 		
 		loadjs('mustache.js', 
