@@ -17,9 +17,19 @@ $(window).ready(function() {
 		$('BODY').prepend(
 			Mustache.render(
 				'<div id="pmp-profiler-details">' +
-					'{{#benchmarks}}' +
-						'{{name}} {{time}}<br/>' +
-					'{{/benchmarks}}' +
+					'<b>' + window.location.pathname + '</b>' +
+					'<hr/>' + 
+					'<div class="benchmark">' +
+						'{{#benchmarks}}' +
+							'{{name}} {{time}}<br/>' +
+						'{{/benchmarks}}' +
+					'</div>' +
+					'<hr/>' +
+					'<div class="queries">' +
+						'{{#queries}}' +
+							'{{query}} {{time}}<br/>' +
+						'{{/queries}}' +
+					'</div>' +
 				'</div>',
 				window.PhpMiniProfiler
 			)
