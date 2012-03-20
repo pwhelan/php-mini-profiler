@@ -8,6 +8,7 @@
 		<div style="clear:both"></div>
 	{{/benchmarks}}
 	</div>
+	<!--
 	<hr/>
 	<div class="queries">
 	{{#queries}}
@@ -15,5 +16,6 @@
 		{{time}} ms<br/>
 	{{/queries}}
 	</div>
+	-->
 </div>
 

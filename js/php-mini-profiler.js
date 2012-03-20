@@ -68,9 +68,97 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		loadjs('highlight/highlight.pack.js', function() {
 			hljs.initHighlightingOnLoad();
 		});
+		
+		var ajaxTemplate = null;
+		$.get(PhpMiniProfiler.includePath + '/templates/ajaxdetails.ms', {}, 
+			function(tmpl) {
+				ajaxTemplate = tmpl;
+			},
+			'html'
+		);
+		
+		var renderAjaxTemplate = function(path, ajaxId) {
+			if (PhpMiniProfiler.AJAXRequestUrl) {
+				$.ajax({
+					url: PhpMiniProfiler.AJAXRequestUrl + '/' + ajaxId,
+					dataType: 'json',
+					beforeSend: function(jqXHR) {
+						jqXHR.setRequestHeader('X-Php-Mini-Profiler', '1');
+					},
+					success: function(data){
+						data.path = path;
+						$('#pmp-profiler-details').append(
+							Mustache.render(ajaxTemplate, data)
+						);
+					}
+				});
+			}
+		};
+		
+		
+		var oldxhr = XMLHttpRequest;
+		XMLHttpRequest = function() {
+			
+			var that = this;
+			var xhr = new oldxhr();
+			var start = new Date();
+			var path = null;
+			
+			this.open = function(method, url, async, username, password) {
+				path = url;
+				return xhr.open(method, url, async, username, password);
+			}
+			
+			this.setRequestHeader = function(name, value) {
+				return xhr.setRequestHeader(name, value);
+			}
+			
+			this.getResponseHeader = function(name) {
+				return xhr.getResponseHeader(name);
+			}
+			
+			this.getAllResponseHeaders = function() {
+				return xhr.getAllResponseHeaders();
+			}
+			
+			this.send = function(data) {
+				return xhr.send(data);
+			}
+			
+			this.abort = function() {
+				return xhr.abort();
+			}
+						
+			xhr.onreadystatechange = function() {
+				
+				that.readyState = xhr.readyState;
+				that.responseXML = xhr.responseXML;
+				that.responseText = xhr.responseText;
+				
+				if (that.readyState == 4) {
+					that.status = xhr.status;
+					that.statusText = xhr.statusText;
+					
+					var ajaxId = xhr.getResponseHeader('X-Php-Mini-Profiler-Id');
+					if (ajaxId) {
+						var end = new Date();
+						var time = end.getTime() - start.getTime();
+						$('#pmp-profiler-total').append('<br/>' + (time/1000) + ' ms');
+						renderAjaxTemplate(path, ajaxId);
+					}
+				}
+				
+				if (typeof that.onreadystatechange == 'function') {
+					that.onreadystatechange.call(xhr);
+				}
+			}
+			
+		};
+		
 	};
 	
 	PhpMiniProfiler.initPath();
 	PhpMiniProfiler.init();
+	
 }
 

@@ -2,7 +2,7 @@
 
 class PHPMiniProfiler4CI {
 	
-	public function run() {
+	public function run($ajax = false) {
 		$CI = &get_instance();
 	
 		$profile = array();
@@ -31,11 +31,19 @@ class PHPMiniProfiler4CI {
 		}
 		
 		$profile[] = array('name' => 'total', 'time' => $sum);
-		return '<script type="text/javascript">window.PhpMiniProfiler = { '.
-				'total: '.json_encode($sum).', '.
-				'benchmarks: '.json_encode($profile).', '.
-				'queries: '.json_encode($this->_compile_queries()).
-			' }</script>';
+		if (!$ajax) {
+			return '<script type="text/javascript">window.PhpMiniProfiler = { '.
+					'total: '.json_encode($sum).', '.
+					'benchmarks: '.json_encode($profile).', '.
+					'queries: '.json_encode($this->_compile_queries()).
+				' }</script>';
+		}
+		else {
+			return json_encode(array(
+				'benchmarks'	=> $profile,
+				'queries'	=> $this->_compile_queries()
+			));
+		}
 	}
 	
 	public function includes() {
