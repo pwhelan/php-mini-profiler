@@ -10,10 +10,13 @@
 	</div>
 	<!--
 	<hr/>
+	<a class="showqueries">Show Queries</a>
 	<div class="queries">
 	{{#queries}}
-		<pre><code class="sql">{{query}}</code></pre>
-		{{time}} ms<br/>
+		<h3><a href="#">{{time}} ms</a></h3>
+		<div>
+			<pre><code class="sql">{{query}}</code></pre>
+		</div>
 	{{/queries}}
 	</div>
 	-->

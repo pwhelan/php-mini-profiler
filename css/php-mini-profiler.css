@@ -42,3 +42,6 @@
 	overflow: auto;
 }
 
+#pmp-profiler-details .queries {
+	display: none;
+}
