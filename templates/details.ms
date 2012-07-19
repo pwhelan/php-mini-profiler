@@ -8,7 +8,6 @@
 		<div style="clear:both"></div>
 	{{/benchmarks}}
 	</div>
-	<!--
 	<hr/>
 	<a class="showqueries">Show Queries</a>
 	<div class="queries">
@@ -19,6 +18,5 @@
 		</div>
 	{{/queries}}
 	</div>
-	-->
 </div>
 
