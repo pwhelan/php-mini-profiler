@@ -1,7 +1,8 @@
 /*
- * Render the tag with the total count for the profile statistics
+ * This file contains all the functions used for rendering the actual UI.
  */
 
+// Options for the accordions applied to the queries list.
 var QueryAccordionOptions = {
 	active: false,
 	collapsible:true,
@@ -19,6 +20,18 @@ renderAjaxTemplate = function(tmpl, path, ajaxId) {
 			success: function(data){
 				data.path = path;
 				
+				// Provide a summary of the query
+				$.each(data.queries, function(i, query) {
+					
+					query.summary = function()
+					{
+						return query.query.
+							replace(/\n/gm,' ').
+							replace(/\s+/gm,' ').
+							substr(0, 32) + '...';
+					}
+				});
+				
 				$('#pmp-profiler-details').append(
 					Mustache.render(ajaxTemplate, data)
 				);
@@ -29,10 +42,24 @@ renderAjaxTemplate = function(tmpl, path, ajaxId) {
 };
 
 renderTemplate = function(tmplName) {
+	
+	// Without synchronous requests we break the UI completely.
+	// Feel free to fix it. -Phillip Whelan
 	$.ajaxSetup({async:false});
 	$.get(PhpMiniProfiler.includePath + '/templates/' + tmplName, {}, 
 		function(tmpl) {
-			console.log('TEMPLATE HAS LOADED, RENDER NOW');
+			
+			// Provide a summary of the query
+			$.each(PhpMiniProfiler.queries, function(i, query) {
+				query.summary = function()
+				{
+					return query.query.
+						replace(/\n/gm,' ').
+						replace(/\s+/gm,' ').
+						substr(0, 32) + '...';
+				}
+			});
+			
 			$('BODY').prepend(
 				Mustache.render(tmpl, PhpMiniProfiler)
 			);
@@ -42,44 +69,42 @@ renderTemplate = function(tmplName) {
 	$.ajaxSetup({async:false});
 };
 
-// TODO: change cursor to hand!
-//$(window).ready(function() {
+
+/*
+ * Render the tag with the total count for the profile statistics
+ */
+if ( typeof window.PhpMiniProfiler == 'object') {
 	
-	if ( typeof window.PhpMiniProfiler == 'object') {
-		console.log('RENDERING NOW...');
+	var details = $('#pmp-profiler-details');
+	
+	renderTemplate('floater.ms');
+	renderTemplate('details.ms');
+	
+	$('#pmp-profiler-details .showqueries').live('click', function() {
+		var queries = $(this).siblings('.queries');
+		var shown = queries.css('display') != 'none';
 		
-		var details = $('#pmp-profiler-details');
-		
-		renderTemplate('floater.ms');
-		renderTemplate('details.ms');
-		
-		$('#pmp-profiler-details .showqueries').live('click', function() {
-			var queries = $(this).siblings('.queries');
-			var shown = queries.css('display') != 'none';
-			
-			$(this).html(shown ? 'Show Queries' : 'Hide Queries');
-			queries.css('display', shown ? 'none' : 'block');
-		});
-		
-		if (typeof $.ui.accordion == 'function') {
-			$('#pmp-profiler-details .queries').
-				accordion(QueryAccordionOptions);
-		}
-		
-		var displayedDetails = false;
-		
-		$('#pmp-profiler-total').live('click', function() {
-			if (!displayedDetails) {
-				$(this).css('color', 'black');
-				$('#pmp-profiler-details').css('display', 'inline');
-			}
-			else {
-				$(this).css('color', 'lightgray');
-				$('#pmp-profiler-details').css('display', 'none');
-			}
-			displayedDetails = !displayedDetails;
-		});
-		
+		$(this).html(shown ? 'Show Queries' : 'Hide Queries');
+		queries.css('display', shown ? 'none' : 'block');
+	});
+	
+	if (typeof $.ui.accordion == 'function') {
+		$('#pmp-profiler-details .queries').
+			accordion(QueryAccordionOptions);
 	}
 	
-//});
+	var displayedDetails = false;
+	
+	$('#pmp-profiler-total').live('click', function() {
+		if (!displayedDetails) {
+			$(this).css('color', 'black');
+			$('#pmp-profiler-details').css('display', 'inline');
+		}
+		else {
+			$(this).css('color', 'lightgray');
+			$('#pmp-profiler-details').css('display', 'none');
+		}
+		displayedDetails = !displayedDetails;
+	});
+	
+}

@@ -13,7 +13,7 @@
 		<a class="showqueries">Show Queries</a>
 		<div class="queries">
 		{{#queries}}
-			<h3><a href="#">{{time}} ms</a></h3>
+			<h3><a href="#">{{summary}} {{time}}/ms</a></h3>
 			<div>
 				<pre><code class="sql">{{query}}</code></pre>
 			</div>
