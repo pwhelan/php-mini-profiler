@@ -19,4 +19,3 @@
 	{{/queries}}
 	</div>
 </div>
-
