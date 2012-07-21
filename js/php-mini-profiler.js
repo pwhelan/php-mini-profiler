@@ -1,7 +1,10 @@
+/*
+ * This is the main piece of the code.
+ */
+
 // Render or Queue up an AJAX call for rendering. 
 // The queue is a backlog for AJAX requests that occur before render.js
 // is loaded.
-
 var ajaxTemplate = null;
 var ajaxReportBacklog = new Array();
 
@@ -13,12 +16,10 @@ function ajaxReport()
 		if (typeof renderAjaxTemplate == 'function') {
 			var time = this._end.getTime() - this._start.getTime();
 			$('#pmp-profiler-total').append('<br/>' + (time/1000) + ' ms');
-			console.log('AJAX TIME = ' + time/1000 + ' ms nodes = ' + $('#pmp-profiler-total').length);
 			
 			renderAjaxTemplate(ajaxTemplate, this._path, this._ajaxId);
 		}
 		else {
-			console.log('ADDING TO BACKLONG = ' + this._ajaxId)
 			ajaxReportBacklog.push(this);
 		}
 	}
@@ -26,7 +27,6 @@ function ajaxReport()
 
 function renderAjaxReportBacklog()
 {
-	console.log('RENDERING BACKLOG');
 	while((report = ajaxReportBacklog.pop())) {
 		ajaxReport.apply(report);
 	}
@@ -115,6 +115,8 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 		);
 		
 		
+		// This is a proxy class for the XMLHttpRequest. This is used to
+		// capture AJAX requests and render their reports.
 		var oldxhr = XMLHttpRequest;
 		XMLHttpRequest = function() {
 			
