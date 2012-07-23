@@ -14,6 +14,12 @@
 	{{#queries}}
 		<h3><a href="#">{{summary}} {{time}}/ms</a></h3>
 		<div>
+			{{#backtrace}}
+				<h4>{{class}}::{{function}}<h4/>
+				{{#paths}}
+					{{path}}<br/>
+				{{/paths}}
+			{{/backtrace}}
 			<pre><code class="sql">{{query}}</code></pre>
 		</div>
 	{{/queries}}

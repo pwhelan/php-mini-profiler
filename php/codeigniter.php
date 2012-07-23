@@ -80,7 +80,11 @@ class PHPMiniProfiler4CI {
 				foreach ($db->queries as $key => $val)
 				{
 					$time = number_format($db->query_times[$key], 4);
-					$queries[] = array('query' => wordwrap($val), 'time' => $time);
+					$queries[] = array(
+							'query'		=> wordwrap($val),
+							'time'		=> $time,
+							'backtrace'	=> @$db->query_backtraces[$key]
+						);
 				}
 			}
 			
