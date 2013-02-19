@@ -60,6 +60,7 @@ $(window).ready(function() {
 				$(this).css('color', 'lightgray');
 				$('#pmp-profiler-details').css('display', 'none');
 			}
+			displayedDetails = !displayedDetails;
 		});
 		
 		renderAjaxTemplate = function(tmpl, path, ajaxId) {
