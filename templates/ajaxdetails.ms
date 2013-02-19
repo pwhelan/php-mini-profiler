@@ -12,7 +12,6 @@
 	<div class="details">
 		<span class="showqueries">Show</span>
 		<span>{{queries.length}} Queries</span>
-		<a class="showqueries">Show Queries</a>
 		<div class="queries">
 		{{#queries}}
 			<h3><a href="#">{{summary}} {{time}}/ms</a></h3>
