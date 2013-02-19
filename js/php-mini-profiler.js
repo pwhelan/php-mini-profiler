@@ -1,3 +1,37 @@
+/*
+ * This is the main piece of the code.
+ */
+
+// Render or Queue up an AJAX call for rendering. 
+// The queue is a backlog for AJAX requests that occur before render.js
+// is loaded.
+var ajaxTemplate = null;
+var ajaxReportBacklog = new Array();
+
+function ajaxReport()
+{
+	if (this._ajaxId) {
+		// We assume that if the function renderAjaxTemplate is not declared
+		// we are still loading render.js
+		if (typeof renderAjaxTemplate == 'function') {
+			var time = this._end.getTime() - this._start.getTime();
+			$('#pmp-profiler-total').append('<br/>' + (time/1000) + ' ms');
+			
+			renderAjaxTemplate(ajaxTemplate, this._path, this._ajaxId);
+		}
+		else {
+			ajaxReportBacklog.push(this);
+		}
+	}
+}
+
+function renderAjaxReportBacklog()
+{
+	while((report = ajaxReportBacklog.pop())) {
+		ajaxReport.apply(report);
+	}
+}
+
 if ( typeof window.PhpMiniProfiler == 'object') {
 	
 	PhpMiniProfiler.includePath = null;
@@ -51,16 +85,20 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			document.getElementsByTagName('head')[0].appendChild(sc);
 		}; 
 		
+		
 		loadcss('highlight/default.css');
 		
 		loadjs('mustache.js', 
 			(typeof jQuery == 'undefined' ? 
 				function() {
-					loadjs('jquery-1.7.1.min.js');
-					loadjs('render.js');
-				} : 
+					loadjs('jquery-1.7.1.min.js', 
+						loadjs('render.js',
+							renderAjaxReportBacklog
+						)
+					);
+				} :
 				function() {
-					loadjs('render.js');
+					loadjs('render.js', renderAjaxReportBacklog);
 				}
 			)
 		);
@@ -69,7 +107,6 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			hljs.initHighlightingOnLoad();
 		});
 		
-		var ajaxTemplate = null;
 		$.get(PhpMiniProfiler.includePath + '/templates/ajaxdetails.ms', {}, 
 			function(tmpl) {
 				ajaxTemplate = tmpl;
@@ -77,32 +114,17 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 			'html'
 		);
 		
-		var renderAjaxTemplate = function(path, ajaxId) {
-			if (PhpMiniProfiler.AJAXRequestUrl) {
-				$.ajax({
-					url: PhpMiniProfiler.AJAXRequestUrl + '/' + ajaxId,
-					dataType: 'json',
-					beforeSend: function(jqXHR) {
-						jqXHR.setRequestHeader('X-Php-Mini-Profiler', '1');
-					},
-					success: function(data){
-						data.path = path;
-						$('#pmp-profiler-details').append(
-							Mustache.render(ajaxTemplate, data)
-						);
-					}
-				});
-			}
-		};
 		
-		
+		// This is a proxy class for the XMLHttpRequest. This is used to
+		// capture AJAX requests and render their reports.
 		var oldxhr = XMLHttpRequest;
 		XMLHttpRequest = function() {
 			
 			var that = this;
 			var xhr = new oldxhr();
-			var start = new Date();
 			var path = null;
+			
+			that._start = new Date();
 			
 			this.open = function(method, url, async, username, password) {
 				path = url;
@@ -136,15 +158,18 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 				that.responseText = xhr.responseText;
 				
 				if (that.readyState == 4) {
-					that.status = xhr.status;
-					that.statusText = xhr.statusText;
-					
-					var ajaxId = xhr.getResponseHeader('X-Php-Mini-Profiler-Id');
-					if (ajaxId) {
-						var end = new Date();
-						var time = end.getTime() - start.getTime();
-						$('#pmp-profiler-total').append('<br/>' + (time/1000) + ' ms');
-						renderAjaxTemplate(path, ajaxId);
+					try {
+						that.status = xhr.status;
+						that.statusText = xhr.statusText;
+						
+						that._end = new Date();
+						that._path = path;
+						that._ajaxId = xhr.getResponseHeader('X-Php-Mini-Profiler-Id');
+						
+						ajaxReport.apply(that);
+					}
+					catch(e) {
+						console.error(e.message);
 					}
 				}
 				
@@ -159,6 +184,5 @@ if ( typeof window.PhpMiniProfiler == 'object') {
 	
 	PhpMiniProfiler.initPath();
 	PhpMiniProfiler.init();
-	
 }
 
