@@ -9,10 +9,17 @@
 </div>
 
 <hr/>
-<div class="queries">
-{{#queries}}
-	<pre><code class="sql">{{query}}</code></pre>
-	{{time}} ms<br/>
-{{/queries}}
+  <div class="details">
+    <span class="showqueries">Show</span>
+    <span>{{queries.length}} Queries</span>
+    <div class="queries">
+    {{#queries}}
+      <h3><a href="#">{{time}} ms</a></h3>
+      <div>
+        <pre><code class="sql">{{query}}</code></pre>
+      </div>
+    {{/queries}}
+    </div>
+  </div>
 </div>
 

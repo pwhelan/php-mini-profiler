@@ -25,14 +25,18 @@ $(window).ready(function() {
 		renderTemplate('floater.ms');
 		renderTemplate('details.ms');
 		
-		$('#pmp-profiler-details .showqueries').click(function() {
-			var shown = $('#pmp-profiler-details .queries').css('display') != 'none';
-			$(this).html(shown ? 'Show Queries' : 'Hide Queries');
-			$('#pmp-profiler-details .queries').css('display', 
+		$('#pmp-profiler-details .showqueries').live('click', function() {
+			var $details = $(this).parent('.details');
+			var $queries = $('.queries', $details);
+			var shown = $queries.css('display') != 'none';
+			
+			$(this).html(shown ? 'Show' : 'Hide');
+			$queries.css('display', 
 				shown ? 'none' : 'block'
 			);
 		});
 		
+		/*
 		if (typeof $.ui.accordion == 'function') {
 			$('#pmp-profiler-details .queries').
 				accordion({
@@ -41,6 +45,7 @@ $(window).ready(function() {
 					autoHeight: false
 				});
 		}
+		*/
 		
 		var displayedDetails = false;
 		
